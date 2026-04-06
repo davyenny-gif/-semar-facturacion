@@ -967,7 +967,6 @@ function guardarCliente(cliente) {
     clientes.push(cliente);
     localStorage.setItem('clientes', JSON.stringify(clientes));
 }
-
 function obtenerCliente(valor) {
     return clientes.find(c =>
         c.nombre.toLowerCase().includes(valor.toLowerCase()) ||
@@ -976,16 +975,20 @@ function obtenerCliente(valor) {
 }
 
 function autocompletarCliente() {
-    const valor = document.getElementById('cli-nombre').value;
+    let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
 
-    const cliente = obtenerCliente(valor);
+    const valor = document.getElementById('cli-nombre').value.toLowerCase();
+
+    const cliente = clientes.find(c =>
+        c.nombre.toLowerCase().includes(valor) ||
+        c.rnc.includes(valor)
+    );
 
     if (cliente) {
-        document.getElementById('cli-nombre').value = cliente.nombre;
-        document.getElementById('cli-rnc').value = cliente.rnc;
-        document.getElementById('cli-tel').value = cliente.telefono;
-        document.getElementById('cli-email').value = cliente.email;
-        document.getElementById('cli-dir').value = cliente.direccion;
+        document.getElementById('cli-rnc').value = cliente.rnc || '';
+        document.getElementById('cli-tel').value = cliente.telefono || '';
+        document.getElementById('cli-email').value = cliente.email || '';
+        document.getElementById('cli-dir').value = cliente.direccion || '';
     }
 }
 </script>
